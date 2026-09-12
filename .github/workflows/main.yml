@@ -1,0 +1,32 @@
+name: Build FARAH CHAT APK & AAB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Expo CLI and Dependencies
+        run: |
+          npm install -g eas-cli
+          npm install react react-native
+
+      - name: Create Package File
+        run: |
+          mkdir -p output
+          zip -r farah-chat-source.zip . -x "*.git*"
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: farah-chat-build
+          path: farah-chat-source.zip
